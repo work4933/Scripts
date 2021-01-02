@@ -1,0 +1,27 @@
+name: 同步Sunert
+on:
+  schedule:
+    - cron: '* 12 * * *'
+  watch:
+    types: started
+  repository_dispatch:
+    types: sync-repo
+jobs:
+      repo-sync:
+        env:
+          PAT: ${{ secrets.PAT }} 
+        runs-on: ubuntu-latest
+        if: github.event.repository.owner.id == github.event.sender.id
+        steps:
+          - uses: actions/checkout@v2
+            with:
+              persist-credentials: false
+
+          - name: sync Sunert-Scripts
+            uses: repo-sync/github-sync@v2
+            if: env.PAT
+            with:
+              source_repo: "https://github.com/Sunert/Scripts.git"
+              source_branch: "master"
+              destination_branch: "master"
+              github_token: ${{ secrets.PAT }}
