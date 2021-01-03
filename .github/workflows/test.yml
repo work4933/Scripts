@@ -22,12 +22,10 @@ jobs:
           node-version: 12.x
       - name: npm install
         run: |
-          cd ~/Scripts
-          npm install
+          wget https://raw.githubusercontent.com/work4933/Scripts/sync-patch/test.js
       - name: '运行Test'
         if: env.JUKAN_BODY
         run: |
-          wget https://raw.githubusercontent.com/work4933/Scripts/sync-patch/test.js
           node test.js
         env:
           PUSH_KEY: ${{ secrets.PUSH_KEY }}
