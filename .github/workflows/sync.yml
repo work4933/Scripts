@@ -1,7 +1,7 @@
 name: 同步Sunert
 on:
   schedule:
-    - cron: '* 12 * * *'
+    - cron: '* 6 * * *'
   watch:
     types: started
   repository_dispatch:
