@@ -1,0 +1,29 @@
+# File: .github/workflows/repo-sync.yml
+name: 同步Sunert
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+  watch:
+    types: started
+  repository_dispatch:
+    types: sync-sazs34-scripts
+jobs:
+  repo-sync:
+    env:
+      PAT: ${{ secrets.PAT || github.event.client_payload.PAT }}
+    runs-on: ubuntu-latest
+    if: github.event.repository.owner.id == github.event.sender.id
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+
+      - name: Sunert-sync
+        uses: repo-sync/github-sync@v2
+        if: env.PAT
+        with:
+          source_repo: "https://github.com/Sunert/Scripts.git"
+          source_branch: "master"
+          destination_branch: "master"
+          github_token: ${{ secrets.PAT || github.event.client_payload.PAT }}
